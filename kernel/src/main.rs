@@ -1,22 +1,24 @@
 #![no_std]
 #![no_main]
 
+use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
+use volatile::Volatile;
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
-    let vga = 0xb8000 as *mut u8;
-    unsafe {
-        *vga.offset(0) = b'H';
-        *vga.offset(1) = 0x0f;
-        *vga.offset(2) = b'i';
-        *vga.offset(3) = 0x0f;
+entry_point!(kernel_main);
+
+fn kernel_main(_boot_info: &'static BootInfo) -> ! {
+    let vga_buffer = 0xb8000 as *mut Volatile<u16>;
+
+    for (i, byte) in b"Hello, OS in Rust!".iter().enumerate() {
+        unsafe {
+            (*vga_buffer.add(i)).write(0x0f00 | *byte as u16);
+        }
     }
 
     loop {}
 }
 
-/// Panic处理函数，裸机环境必须定义
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     loop {}
