@@ -1,0 +1,24 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+bootloader = "0.9.23"
+
+[profile.dev]
+panic = "abort"
+codegen-units = 1
+incremental = false
+overflow-checks = false
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+incremental = false
+lto = true
+
+[[bin]]
+name = "kernel"
+path = "src/lib.rs"
