@@ -3,19 +3,24 @@
 
 use core::panic::PanicInfo;
 
-// entry_point!(kernel_main, config = &BOOTLOADER_CONFIG);
+#[no_mangle]
+pub extern "C" fn kernel_main() -> ! {
+    let vga_buffer = 0xb8000 as *mut u8;
+    let message = b"Hello, 64-bit Rust OS!";
 
-// fn kernel_main(_boot_info: &'static BootInfo) -> ! {
-//     let vga_buffer = 0xb8000 as *mut Volatile<u16>;
+    for (i, &byte) in message.iter().enumerate() {
+        unsafe {
+            *vga_buffer.offset(i as isize * 2) = byte; // 字符
+            *vga_buffer.offset(i as isize * 2 + 1) = 0x0f; // 颜色（白底黑字）
+        }
+    }
 
-//     for (i, byte) in b"Hello, OS in Rust!".iter().enumerate() {
-//         unsafe {
-//             (*vga_buffer.add(i)).write(0x0f00 | *byte as u16);
-//         }
-//     }
-
-//     loop {}
-// }
+    loop {
+        unsafe {
+            core::arch::asm!("hlt");
+        }
+    }
+}
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {

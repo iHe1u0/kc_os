@@ -1,8 +1,1 @@
-isodir/
-
-*.iso
-*.bin
-
-# Added by cargo
-
-/**/target
+/target

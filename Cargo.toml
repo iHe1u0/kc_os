@@ -1,6 +1,6 @@
-[workspace]
-members = ["kernel"]
-resolver = "3"
+[package]
+name = "kc_os"
+version = "0.1.0"
+edition = "2024"
 
-[profile.release]
-opt-level = "z"
+[dependencies]
