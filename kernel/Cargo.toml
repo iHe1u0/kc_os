@@ -1,12 +1,21 @@
 [package]
-name = "kc_os"
+name = "kernel"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+# compiler_builtins = { version = "0.1.160", features = [
+#     "mem",
+# ], default-features = false, optional = true }
+
+# [features]
+# default = ["compiler_builtins"]
 
 [profile.dev]
+opt-level = 0
+debug = true
 panic = "abort"
+strip = false
 
 [profile.release]
 panic = "abort"

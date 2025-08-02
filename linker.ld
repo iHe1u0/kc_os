@@ -1,24 +1,16 @@
-ENTRY(_start)
+ENTRY(kernel_main)
 
-SECTIONS
-{
-    /* 1MB开始放64位代码和Rust内核 */
-    . = 0x100000;
+SECTIONS {
+    . = 1M;
 
     .text : {
+        KEEP(*(.text.kernel_main))
         *(.text*)
     }
-
-    .rodata : {
-        *(.rodata*)
-    }
-
-    .data : {
-        *(.data*)
-    }
-
+    .rodata : { *(.rodata*) }
+    .data : { *(.data*) }
     .bss : {
-        *(.bss*)
         *(COMMON)
+        *(.bss*)
     }
 }

@@ -1,1 +1,7 @@
 /target
+
+*.o
+*.obj
+*.bin
+*.elf
+*.img
